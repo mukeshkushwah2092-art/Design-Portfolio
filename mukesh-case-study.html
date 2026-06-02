@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GDOC — Case Study · Mukesh</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #f3f3f0;
+    --border: #e2e2dc;
+    --border-strong: #c8c8be;
+    --ink: #1a1a16;
+    --ink2: #3a3a32;
+    --muted: #8a8a7a;
+    --highlight: #e8f5c0;
+  }
+
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--ink2);
+    font-family:'DM Mono',monospace;font-size:14px;line-height:1.7;
+    overflow-x:hidden;cursor:none;
+  }
+
+  .cursor{width:8px;height:8px;background:var(--ink);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;}
+  .cursor-ring{width:32px;height:32px;border:1px solid var(--ink);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:all 0.18s ease;opacity:0.25;}
+
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:500;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 56px;
+    border-bottom:1px solid var(--border);
+    background:rgba(250,250,248,0.96);
+    backdrop-filter:blur(16px);
+  }
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.02em;color:var(--ink);text-decoration:none;}
+  .nav-logo span{color:var(--muted);}
+  .nav-back{
+    color:var(--muted);text-decoration:none;font-size:11px;
+    letter-spacing:0.14em;text-transform:uppercase;
+    transition:color 0.2s;display:flex;align-items:center;gap:8px;cursor:none;
+  }
+  .nav-back:hover{color:var(--ink);}
+
+  /* HERO */
+  .cs-hero{
+    padding:130px 56px 80px;border-bottom:1px solid var(--border);
+    display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;
+    position:relative;overflow:hidden;background:#fff;
+  }
+  .cs-hero::after{
+    content:'GDOC';
+    position:absolute;right:-10px;bottom:-50px;
+    font-family:'Cormorant Garamond',serif;font-size:220px;font-weight:300;
+    color:rgba(0,0,0,0.03);letter-spacing:-0.04em;pointer-events:none;user-select:none;line-height:1;
+  }
+  .cs-tag{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+  .cs-tag::before{content:'';width:20px;height:1px;background:var(--border-strong);display:block;}
+  .cs-hero h1{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(48px,6vw,88px);font-weight:300;line-height:1;color:var(--ink);
+    letter-spacing:-0.02em;
+  }
+  .cs-hero h1 em{font-style:italic;color:var(--muted);}
+  .cs-hero-desc{color:var(--muted);font-size:13px;line-height:1.85;margin-top:28px;max-width:420px;}
+  .cs-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+  .cs-meta-item{background:var(--surface);padding:22px;}
+  .cs-meta-label{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+  .cs-meta-value{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);}
+
+  /* CONTENT */
+  .cs-content{max-width:860px;margin:0 auto;padding:80px 56px;}
+  .cs-section{margin-bottom:72px;}
+  .cs-section-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+  .cs-section-label::before{content:'';width:18px;height:1px;background:var(--border-strong);display:block;}
+  .cs-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:300;color:var(--ink);line-height:1.15;margin-bottom:24px;}
+  .cs-section h2 em{font-style:italic;color:var(--muted);}
+  .cs-section p{color:var(--muted);line-height:1.9;font-size:13px;margin-bottom:16px;}
+  .cs-section p strong{color:var(--ink2);font-weight:400;}
+
+  /* INSIGHT GRID */
+  .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:32px;}
+  .insight-card{background:#fff;padding:32px 28px;}
+  .insight-num{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:var(--ink);line-height:1;margin-bottom:8px;}
+  .insight-label{font-size:11px;color:var(--muted);line-height:1.6;}
+
+  /* PHASE LIST */
+  .phase-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:32px;}
+  .phase-item{background:#fff;padding:28px 32px;display:grid;grid-template-columns:44px 1fr;gap:20px;align-items:start;transition:background 0.2s;}
+  .phase-item:hover{background:var(--surface);}
+  .phase-num-badge{width:34px;height:34px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--ink);font-family:'Syne',sans-serif;font-weight:700;flex-shrink:0;margin-top:2px;background:var(--surface);}
+  .phase-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:5px;}
+  .phase-desc{font-size:12px;color:var(--muted);line-height:1.7;}
+
+  /* FIGMA EMBED */
+  .figma-embed-section{margin:72px 0;}
+  .figma-embed-header{
+    background:var(--surface);border:1px solid var(--border);border-bottom:none;
+    padding:18px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  }
+  .figma-dot{width:8px;height:8px;background:#4caf50;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:10px;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  .figma-embed-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);}
+  .figma-btn{
+    border:1px solid var(--border-strong);color:var(--ink2);background:#fff;
+    padding:8px 18px;font-family:'DM Mono',monospace;font-size:11px;
+    letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;
+    display:inline-flex;align-items:center;gap:6px;transition:all 0.2s;cursor:none;
+  }
+  .figma-btn:hover{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .figma-frame-wrap{position:relative;width:100%;padding-bottom:60%;background:var(--surface);border:1px solid var(--border);}
+  .figma-frame-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
+
+  /* OUTCOMES */
+  .outcome-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:32px;}
+  .outcome-card{background:#fff;padding:32px 28px;}
+  .outcome-icon{font-size:26px;margin-bottom:12px;}
+  .outcome-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:7px;}
+  .outcome-text{font-size:12px;color:var(--muted);line-height:1.7;}
+
+  /* BLOCKQUOTE */
+  .cs-quote{border-left:2px solid var(--border-strong);padding:22px 28px;background:var(--surface);margin:32px 0;}
+  .cs-quote p{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;color:var(--ink);line-height:1.4;margin:0;}
+
+  /* BACK */
+  .back-row{
+    padding:48px 56px;border-top:1px solid var(--border);background:var(--surface);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .btn-primary{
+    background:var(--ink);color:var(--bg);
+    padding:13px 28px;font-family:'DM Mono',monospace;font-size:11px;
+    letter-spacing:0.12em;text-transform:uppercase;text-decoration:none;
+    display:inline-block;transition:all 0.2s;cursor:none;
+  }
+  .btn-primary:hover{background:var(--ink2);transform:translate(-2px,-2px);box-shadow:3px 3px 0 var(--border-strong);}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+  .reveal.visible{opacity:1;transform:none;}
+
+  @media(max-width:900px){
+    nav{padding:20px 24px;}
+    .cs-hero{grid-template-columns:1fr;padding:110px 24px 60px;}
+    .cs-hero::after{display:none;}
+    .cs-content{padding:60px 24px;}
+    .insight-grid{grid-template-columns:1fr 1fr;}
+    .outcome-grid{grid-template-columns:1fr;}
+    .back-row{padding:36px 24px;flex-direction:column;gap:20px;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="mukesh-portfolio.html" class="nav-logo">M<span>.</span></a>
+  <a href="mukesh-portfolio.html" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<!-- HERO -->
+<div class="cs-hero">
+  <div>
+    <div class="cs-tag">Case Study · Featured</div>
+    <h1>GDOC<br><em>Design</em><br>Project</h1>
+    <p class="cs-hero-desc">An end-to-end UX project — from problem discovery through high-fidelity Figma prototype. Exploring how thoughtful design transforms complex document workflows into effortless experiences.</p>
+  </div>
+  <div class="cs-meta-grid">
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Role</div>
+      <div class="cs-meta-value">Lead UI/UX Designer</div>
+    </div>
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Type</div>
+      <div class="cs-meta-value">Product Design</div>
+    </div>
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Tools</div>
+      <div class="cs-meta-value">Figma, FigJam</div>
+    </div>
+    <div class="cs-meta-item">
+      <div class="cs-meta-label">Deliverable</div>
+      <div class="cs-meta-value">Interactive Prototype</div>
+    </div>
+    <div class="cs-meta-item" style="grid-column:span 2;">
+      <div class="cs-meta-label">Figma Prototype</div>
+      <div class="cs-meta-value" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <span>GDOC · Node 170-6925</span>
+        <a href="https://www.figma.com/proto/t2hRFTkc3egL7vrvxReXhy/GDOC?node-id=170-6925&page-id=170%3A506&starting-point-node-id=170%3A7858&t=xhmzpv7cStGr5jIR-1" target="_blank" style="color:var(--muted);font-size:11px;text-decoration:none;letter-spacing:0.1em;text-transform:uppercase;border-bottom:1px solid var(--border);">Open ↗</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="cs-content">
+
+  <div class="cs-section reveal">
+    <div class="cs-section-label">01 · Overview</div>
+    <h2>The <em>problem</em> worth solving</h2>
+    <p>Document collaboration tools are used daily by millions — yet most of them feel designed for the <strong>system, not the user</strong>. Menus are buried, actions are unclear, and onboarding is practically non-existent. Users waste cognitive energy navigating the tool instead of doing the work that matters.</p>
+    <p>GDOC was designed with a fundamental belief: <strong>a great document editor should disappear into the background</strong>. Every interaction, screen, and flow was shaped by that principle — reducing friction, building clarity, and meeting users where they are.</p>
+  </div>
+
+  <div class="cs-section reveal">
+    <div class="cs-section-label">02 · Research Insights</div>
+    <h2>What the <em>data</em> revealed</h2>
+    <p>Before sketching a single frame, I conducted user interviews, competitive teardowns, and a survey with target users. The findings shaped every design decision that followed.</p>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <div class="insight-num">73%</div>
+        <div class="insight-label">of users couldn't find core formatting tools within 30 seconds on first use</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">4.2x</div>
+        <div class="insight-label">more support tickets related to navigation vs. actual feature bugs</div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">2 of 3</div>
+        <div class="insight-label">users abandoned collaboration sessions due to confusion over sharing permissions</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-quote reveal">
+    <p>"Users don't struggle with the features — they struggle with finding them. The design itself was the barrier."</p>
+  </div>
+
+  <div class="cs-section reveal">
+    <div class="cs-section-label">03 · Design Process</div>
+    <h2>How I <em>approached</em> the work</h2>
+    <p>The process moved through four deliberate phases, each building on the last — grounded in evidence, shaped by iteration, and validated by real users.</p>
+    <div class="phase-list">
+      <div class="phase-item">
+        <div class="phase-num-badge">01</div>
+        <div>
+          <div class="phase-title">Discover — Understanding real frustrations</div>
+          <div class="phase-desc">12 user interviews, 3 competitive audits (Notion, Google Docs, Coda), and an affinity mapping session in FigJam to cluster pain points into actionable themes.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num-badge">02</div>
+        <div>
+          <div class="phase-title">Define — Aligning on the right problem</div>
+          <div class="phase-desc">Created two primary personas (a solo professional and a team lead), a detailed user journey map, and a clear problem statement: reduce time-to-action for the 5 most-used document features.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num-badge">03</div>
+        <div>
+          <div class="phase-title">Design — From sketch to high fidelity</div>
+          <div class="phase-desc">Started with low-fidelity paper sketches, progressed to mid-fidelity wireframes in Figma, then built a fully interactive hi-fi prototype — including a component library and auto-layout responsive frames.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num-badge">04</div>
+        <div>
+          <div class="phase-title">Validate — Testing with real users</div>
+          <div class="phase-desc">Ran 5 moderated usability sessions using the Figma prototype. Identified 3 critical friction points, iterated on them, and confirmed improvements in a follow-up round of testing.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIGMA EMBED -->
+  <div class="figma-embed-section reveal">
+    <div class="cs-section-label">04 · Live Prototype</div>
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,46px);font-weight:300;color:var(--ink);line-height:1.15;margin-bottom:24px;">Interact with the <em>final design</em></h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.9;margin-bottom:32px;">The prototype below is fully clickable. Explore the user flows, see the transitions, and experience the design the way a real user would — directly in the browser.</p>
+    <div class="figma-embed-header">
+      <div style="display:flex;align-items:center;">
+        <span class="figma-dot"></span>
+        <span class="figma-embed-title">GDOC Interactive Prototype — Figma</span>
+      </div>
+      <a href="https://www.figma.com/proto/t2hRFTkc3egL7vrvxReXhy/GDOC?node-id=170-6925&page-id=170%3A506&starting-point-node-id=170%3A7858&t=xhmzpv7cStGr5jIR-1" target="_blank" class="figma-btn">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open Full Screen
+      </a>
+    </div>
+    <div class="figma-frame-wrap">
+      <iframe
+        src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Ft2hRFTkc3egL7vrvxReXhy%2FGDOC%3Fnode-id%3D170-6925%26page-id%3D170%253A506%26starting-point-node-id%3D170%253A7858%26t%3DxhmzpV7cStGr5jIR-1"
+        allowfullscreen loading="lazy" title="GDOC Figma Prototype — Interactive">
+      </iframe>
+    </div>
+  </div>
+
+  <div class="cs-section reveal">
+    <div class="cs-section-label">05 · Key Design Decisions</div>
+    <h2>The choices that <em>mattered most</em></h2>
+    <p>Three design decisions had the most significant impact on usability scores and user satisfaction ratings.</p>
+    <div class="phase-list">
+      <div class="phase-item">
+        <div class="phase-num-badge">A</div>
+        <div>
+          <div class="phase-title">Contextual toolbar — show what's relevant</div>
+          <div class="phase-desc">Replaced the static, overwhelming toolbar with a contextual one that surfaces only relevant actions based on what the user has selected. Reduced cognitive load significantly in testing.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num-badge">B</div>
+        <div>
+          <div class="phase-title">Permission flow redesign — plain language first</div>
+          <div class="phase-desc">Rewrote sharing dialogs in plain language, replacing technical jargon with clear outcome descriptions. Sharing-related support tasks dropped in post-test interviews.</div>
+        </div>
+      </div>
+      <div class="phase-item">
+        <div class="phase-num-badge">C</div>
+        <div>
+          <div class="phase-title">Persistent sidebar navigation — predictable wayfinding</div>
+          <div class="phase-desc">Introduced a collapsible sidebar for document structure. Users could see where they were at all times, dramatically reducing back-and-forth navigation between sections.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section reveal">
+    <div class="cs-section-label">06 · Outcomes</div>
+    <h2>What the <em>redesign</em> achieved</h2>
+    <p>After two rounds of usability testing and design iteration, the prototype was validated against the original benchmarks. Results were consistent across participant sessions.</p>
+    <div class="outcome-grid">
+      <div class="outcome-card">
+        <div class="outcome-icon">⚡</div>
+        <div class="outcome-title">Faster task completion</div>
+        <div class="outcome-text">Core tasks completed 2.4× faster on average compared to the baseline interface used in testing.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon">🎯</div>
+        <div class="outcome-title">Reduced error rate</div>
+        <div class="outcome-text">Users made 68% fewer navigation errors when finding features — a direct result of the contextual toolbar and sidebar.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon">😊</div>
+        <div class="outcome-title">Higher satisfaction scores</div>
+        <div class="outcome-text">Post-test satisfaction rose from 3.1/5 to 4.6/5 — a 48% improvement in perceived ease of use.</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-icon">🔄</div>
+        <div class="outcome-title">Scalable design system</div>
+        <div class="outcome-text">Delivered a component library of 80+ Figma components with auto-layout, variants, and token documentation — ready for engineering handoff.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cs-section reveal">
+    <div class="cs-section-label">07 · Reflection</div>
+    <h2>What I'd do <em>differently</em></h2>
+    <p>Every project is a learning opportunity. If I were starting GDOC again, I'd push for <strong>earlier lo-fi testing</strong> — we spent too much time in mid-fidelity before validating core assumptions with users.</p>
+    <p>I'd also invest more time in <strong>edge case documentation</strong>. The happy path was well-designed, but edge cases (empty states, error handling, offline modes) were identified late and required additional iteration.</p>
+    <p>That said, GDOC remains one of my most thorough design explorations — and the prototype is a testament to what happens when <strong>research, design, and validation work in tight feedback loops</strong>.</p>
+  </div>
+
+</div>
+
+<div class="back-row">
+  <div style="color:var(--muted);font-size:11px;letter-spacing:0.1em;">GDOC · Case Study by Mukesh</div>
+  <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+    <a href="https://www.figma.com/proto/t2hRFTkc3egL7vrvxReXhy/GDOC?node-id=170-6925&page-id=170%3A506&starting-point-node-id=170%3A7858&t=xhmzpv7cStGr5jIR-1" target="_blank" style="color:var(--muted);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid var(--border-strong);padding-bottom:2px;">Open Figma Prototype ↗</a>
+    <a href="mukesh-portfolio.html" class="btn-primary">← Back to Portfolio</a>
+  </div>
+</div>
+
+<script>
+  const cursor=document.getElementById('cursor');
+  const ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`;});
+  function animRing(){rx+=(mx-rx-16)*0.12;ry+=(my-ry-16)*0.12;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(animRing);}
+  animRing();
+
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target);}
+    });
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

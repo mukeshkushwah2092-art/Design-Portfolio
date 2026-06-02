@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mukesh — UI/UX Designer</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f5fb;
+    --surface: #eeeef8;
+    --surface2: #ffffff;
+    --border: #d8d8ee;
+    --border-strong: #b0b0d8;
+    --blue: #2a47c4;
+    --blue-mid: #4a66d8;
+    --blue-light: #dde4fb;
+    --lavender: #7c6fc4;
+    --lavender-mid: #a99dd8;
+    --lavender-light: #ede9f8;
+    --ink: #1a1a32;
+    --ink2: #363656;
+    --muted: #7878a0;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink2);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--blue);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+  }
+  .cursor-ring {
+    width: 32px; height: 32px;
+    border: 1.5px solid var(--lavender);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: all 0.18s ease; opacity: 0.4;
+  }
+
+  /* Subtle mesh bg */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 10% 10%, rgba(122,111,196,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 600px 500px at 90% 80%, rgba(42,71,196,0.06) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 56px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  nav.scrolled {
+    border-color: var(--border);
+    background: rgba(245,245,251,0.93);
+    backdrop-filter: blur(18px);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 18px; letter-spacing: -0.02em; color: var(--ink);
+  }
+  .nav-logo span { color: var(--lavender); }
+  .nav-links { display: flex; gap: 40px; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 120px 56px 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: 0.35; pointer-events: none;
+  }
+  .hero-label {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--lavender); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-label::before { content: ''; width: 28px; height: 1px; background: var(--lavender-mid); display: block; }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(60px, 7vw, 108px);
+    font-weight: 300; line-height: 0.95;
+    letter-spacing: -0.02em; color: var(--ink); margin-bottom: 32px;
+  }
+  .hero h1 em { font-style: italic; color: var(--blue); }
+  .hero-desc {
+    color: var(--muted); font-size: 13px; line-height: 1.85;
+    max-width: 380px; margin-bottom: 48px;
+  }
+  .hero-cta { display: flex; gap: 20px; align-items: center; }
+  .btn-primary {
+    background: var(--blue); color: #fff;
+    padding: 14px 32px; font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    border: none; cursor: none; text-decoration: none; display: inline-block;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover {
+    background: var(--lavender);
+    transform: translate(-2px, -2px);
+    box-shadow: 3px 3px 0 var(--border-strong);
+  }
+  .btn-outline {
+    color: var(--muted); font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; text-decoration: none;
+    border-bottom: 1px solid var(--border-strong); padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-outline:hover { color: var(--blue); border-color: var(--blue); }
+
+  .hero-right { display: flex; justify-content: flex-end; align-items: center; position: relative; }
+  .hero-visual { width: 420px; height: 520px; position: relative; }
+  .hero-card {
+    position: absolute; background: #fff;
+    border: 1px solid var(--border);
+    padding: 28px;
+    box-shadow: 0 4px 24px rgba(42,71,196,0.08);
+    animation: float 6s ease-in-out infinite;
+  }
+  .hero-card:nth-child(1) { top: 0; right: 0; width: 300px; animation-delay: 0s; }
+  .hero-card:nth-child(2) { top: 180px; left: 0; width: 260px; animation-delay: -2s; }
+  .hero-card:nth-child(3) { bottom: 0; right: 40px; width: 280px; animation-delay: -4s; }
+  @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+  .card-tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--lavender); margin-bottom: 10px; }
+  .card-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; color: var(--ink); margin-bottom: 6px; }
+  .card-sub { font-size: 11px; color: var(--muted); line-height: 1.6; }
+  .card-bar { margin-top: 14px; height: 2px; background: var(--border); overflow: hidden; border-radius: 2px; }
+  .card-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--lavender));
+    animation: expand 2s ease forwards;
+  }
+  @keyframes expand { from{width:0;} to{width:var(--w);} }
+
+  .hero-stats { position: absolute; bottom: 80px; left: 56px; display: flex; gap: 48px; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300; color: var(--ink); line-height: 1; }
+  .stat-num span { color: var(--blue); }
+  .stat-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  /* SECTIONS */
+  section { padding: 100px 56px; position: relative; z-index: 1; }
+  .section-label {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--lavender); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before { content: ''; width: 20px; height: 1px; background: var(--lavender-mid); }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 62px); font-weight: 300;
+    color: var(--ink); line-height: 1.1; margin-bottom: 16px;
+  }
+  .section-title em { font-style: italic; color: var(--blue); }
+
+  /* ABOUT */
+  .about { border-top: 1px solid var(--border); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 64px; align-items: start; }
+  .about-text p { color: var(--muted); line-height: 1.9; margin-bottom: 20px; font-size: 13px; }
+  .about-text p strong { color: var(--ink2); font-weight: 400; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .skill-item { background: #fff; padding: 24px; transition: background 0.2s; }
+  .skill-item:hover { background: var(--lavender-light); }
+  .skill-name { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+  .skill-desc { font-size: 11px; color: var(--muted); }
+
+  /* PROCESS */
+  .process { background: var(--lavender-light); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .process-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 64px; }
+  .process-step { background: #fff; padding: 40px 32px; position: relative; overflow: hidden; transition: background 0.25s; }
+  .process-step::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px; background: linear-gradient(90deg, var(--blue), var(--lavender));
+    transform: scaleX(0); transition: transform 0.3s ease;
+  }
+  .process-step:hover { background: var(--blue-light); }
+  .process-step:hover::after { transform: scaleX(1); }
+  .step-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: var(--border); line-height: 1; margin-bottom: 24px; transition: color 0.3s; }
+  .process-step:hover .step-num { color: var(--lavender-mid); }
+  .step-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
+  .step-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+  /* PROJECTS */
+  .projects { border-top: 1px solid var(--border); }
+  .projects-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 64px; }
+  .project-card {
+    background: #fff; padding: 40px 36px;
+    display: flex; flex-direction: column; gap: 16px;
+    position: relative; overflow: hidden; transition: background 0.25s; cursor: none;
+  }
+  .project-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; background: linear-gradient(90deg, var(--blue), var(--lavender));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+  }
+  .project-card:hover { background: var(--blue-light); }
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-number { font-size: 10px; letter-spacing: 0.15em; color: var(--muted); }
+  .project-icon {
+    width: 52px; height: 52px; border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; background: var(--surface);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .project-card:hover .project-icon { border-color: var(--lavender-mid); background: var(--lavender-light); }
+  .project-name { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .project-type { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--lavender); }
+  .project-desc { font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .project-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+  .tag {
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    border: 1px solid var(--border); padding: 3px 9px; background: var(--surface);
+    transition: all 0.2s;
+  }
+  .project-card:hover .tag { border-color: var(--lavender-mid); color: var(--lavender); background: var(--lavender-light); }
+
+  /* FIGMA */
+  .figma-section { border-top: 1px solid var(--border); }
+  .figma-wrapper { margin-top: 64px; border: 1px solid var(--border); background: #fff; overflow: hidden; box-shadow: 0 4px 32px rgba(42,71,196,0.07); }
+  .figma-header {
+    padding: 18px 28px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 14px;
+    background: linear-gradient(135deg, var(--blue-light), var(--lavender-light));
+  }
+  .figma-header-left { display: flex; align-items: center; gap: 12px; }
+  .figma-dot { width: 8px; height: 8px; background: #4caf50; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  .figma-title { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+  .figma-subtitle { font-size: 11px; color: var(--muted); margin-top: 1px; }
+  .figma-open-btn {
+    border: 1px solid var(--blue); color: var(--blue); background: #fff;
+    padding: 9px 20px; font-family: 'DM Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 7px; transition: all 0.2s; cursor: none;
+  }
+  .figma-open-btn:hover { background: var(--blue); color: #fff; }
+  .figma-embed-container { position: relative; width: 100%; padding-bottom: 56.25%; background: var(--surface); }
+  .figma-embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .figma-overlay-hint {
+    position: absolute; bottom: 16px; right: 16px;
+    background: rgba(245,245,251,0.92); border: 1px solid var(--border);
+    padding: 8px 14px; font-size: 10px; color: var(--muted);
+    pointer-events: none; backdrop-filter: blur(8px); letter-spacing: 0.06em;
+  }
+
+  /* QUOTE */
+  .quote-section {
+    background: linear-gradient(135deg, var(--blue) 0%, var(--lavender) 100%);
+    padding: 100px 56px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .quote-inner { max-width: 800px; text-align: center; }
+  .quote-mark { font-family: 'Cormorant Garamond', serif; font-size: 120px; line-height: 0.5; color: rgba(255,255,255,0.15); display: block; margin-bottom: 24px; }
+  .quote-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(24px,3.5vw,42px); font-weight: 300; color: #fff; line-height: 1.35; font-style: italic; }
+  .quote-author { margin-top: 32px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.45); }
+
+  /* CONTACT */
+  .contact { border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .contact-left .section-title { font-size: clamp(32px,4vw,52px); }
+  .contact-text { color: var(--muted); font-size: 13px; line-height: 1.85; margin-top: 24px; }
+  .contact-links { display: flex; flex-direction: column; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .contact-link {
+    background: #fff; padding: 22px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    text-decoration: none; color: var(--ink2); transition: background 0.2s; cursor: none;
+  }
+  .contact-link:hover { background: var(--blue-light); }
+  .contact-link-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .contact-link-value { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); margin-top: 3px; }
+  .contact-link-arrow { color: var(--lavender); font-size: 18px; transition: color 0.2s; }
+  .contact-link:hover .contact-link-arrow { color: var(--blue); }
+
+  /* FOOTER */
+  footer {
+    padding: 28px 56px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+    color: var(--muted); font-size: 11px; letter-spacing: 0.08em;
+    background: var(--lavender-light);
+  }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* Hero entrance */
+  .hero-content > * { opacity: 0; animation: slideUp 0.8s ease forwards; }
+  .hero-content > *:nth-child(1) { animation-delay: 0.15s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.3s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.45s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.6s; }
+  @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:none;} }
+  .hero-right { opacity: 0; animation: fadeIn 1s ease 0.5s forwards; }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 80px; }
+    .hero-right { display: none; }
+    .hero-stats { left: 24px; gap: 32px; }
+    section { padding: 80px 24px; }
+    .about-grid { grid-template-columns: 1fr; gap: 48px; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .contact { grid-template-columns: 1fr; gap: 48px; }
+    footer { flex-direction: column; gap: 10px; text-align: center; padding: 24px; }
+    .quote-section { padding: 80px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav id="navbar">
+  <div class="nav-logo">M<span>.</span></div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#process">Process</a>
+    <a href="#work">Work</a>
+    <a href="#prototype">Prototype</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-label">UI / UX Designer</div>
+    <h1>Mukesh<br><em>Designs</em><br>That Work</h1>
+    <p class="hero-desc">7+ years crafting user-centered products across web and mobile — from e-commerce to enterprise dashboards. Turning complexity into clarity.</p>
+    <div class="hero-cta">
+      <a href="#work" class="btn-primary">View Work</a>
+      <a href="#contact" class="btn-outline">Get in Touch →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="card-tag">E-commerce</div>
+        <div class="card-title">Checkout Redesign</div>
+        <div class="card-sub">Reduced drop-off by 34% through streamlined flow</div>
+        <div class="card-bar"><div class="card-bar-fill" style="--w:78%"></div></div>
+      </div>
+      <div class="hero-card">
+        <div class="card-tag">Dashboard</div>
+        <div class="card-title">Analytics Platform</div>
+        <div class="card-sub">Enterprise-grade data visualization</div>
+        <div class="card-bar"><div class="card-bar-fill" style="--w:92%"></div></div>
+      </div>
+      <div class="hero-card">
+        <div class="card-tag">Mobile App</div>
+        <div class="card-title">FinTech Wallet</div>
+        <div class="card-sub">4.8★ App Store · 200K+ users</div>
+        <div class="card-bar"><div class="card-bar-fill" style="--w:95%"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num">7<span>+</span></div>
+      <div class="stat-label">Years Exp.</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">40<span>+</span></div>
+      <div class="stat-label">Projects</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num">12<span>+</span></div>
+      <div class="stat-label">Industries</div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="section-label">About</div>
+  <div class="section-title">Design thinking<br>meets <em>real users</em></div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>Hi, I'm <strong>Mukesh</strong> — a UI/UX designer with over <strong>7 years of experience</strong> designing user-centered products across web and mobile platforms.</p>
+      <p>I've worked on projects ranging from <strong>e-commerce to enterprise dashboards</strong>, focusing on creating intuitive interfaces and seamless user journeys that serve real people in real contexts.</p>
+      <p>My approach is rooted in <strong>design thinking</strong> — I believe the best products come from deeply understanding the human on the other end. I turn <strong>complex requirements into simple, meaningful experiences</strong> that just work.</p>
+    </div>
+    <div class="skills-grid reveal">
+      <div class="skill-item"><div class="skill-name">User Research</div><div class="skill-desc">Interviews, surveys, usability testing</div></div>
+      <div class="skill-item"><div class="skill-name">Interaction Design</div><div class="skill-desc">Flows, prototypes, microinteractions</div></div>
+      <div class="skill-item"><div class="skill-name">Visual Design</div><div class="skill-desc">Systems, typography, color theory</div></div>
+      <div class="skill-item"><div class="skill-name">Figma / Prototyping</div><div class="skill-desc">Hi-fi mockups, interactive prototypes</div></div>
+      <div class="skill-item"><div class="skill-name">Design Systems</div><div class="skill-desc">Scalable, component-based libraries</div></div>
+      <div class="skill-item"><div class="skill-name">Dev Handoff</div><div class="skill-desc">Specs, tokens, cross-team alignment</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="section-label">Process</div>
+  <div class="section-title">How I solve<br><em>design problems</em></div>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Discover</div>
+      <div class="step-desc">Deep-dive into user research, stakeholder interviews, and competitive analysis to uncover real problems worth solving.</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">02</div>
+      <div class="step-title">Define</div>
+      <div class="step-desc">Synthesize findings into clear problem statements, personas, and user journey maps that guide every decision forward.</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">03</div>
+      <div class="step-title">Design</div>
+      <div class="step-desc">Ideate through sketches, wireframes, and high-fidelity prototypes — iterating fast and staying close to the user's mental model.</div>
+    </div>
+    <div class="process-step reveal">
+      <div class="step-num">04</div>
+      <div class="step-title">Deliver</div>
+      <div class="step-desc">Validate through usability testing, refine based on evidence, and hand off pixel-perfect specs to engineering teams.</div>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="work">
+  <div class="section-label">Selected Work</div>
+  <div class="section-title">Projects that<br><em>moved the needle</em></div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-number">001</div>
+      <div class="project-icon">📄</div>
+      <div class="project-type">GDOC · Featured Case Study</div>
+      <div class="project-name">GDOC Design Case Study</div>
+      <div class="project-desc">An in-depth Figma prototype walkthrough — covering research, information architecture, wireframes, and the final high-fidelity interactive prototype.</div>
+      <div class="project-tags">
+        <span class="tag">Figma Prototype</span>
+        <span class="tag">Case Study</span>
+        <span class="tag">Featured</span>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
+        <a href="mukesh-case-study.html" target="_blank" style="background:var(--blue);color:#fff;padding:9px 18px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;display:inline-block;">View Case Study →</a>
+        <a href="https://www.figma.com/proto/t2hRFTkc3egL7vrvxReXhy/GDOC?node-id=170-6925&page-id=170%3A506&starting-point-node-id=170%3A7858&t=xhmzpv7cStGr5jIR-1" target="_blank" style="border:1px solid var(--border-strong);color:var(--lavender);padding:9px 18px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;transition:all 0.2s;display:inline-block;background:#fff;">Open Figma ↗</a>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">002</div>
+      <div class="project-icon">📊</div>
+      <div class="project-type">Enterprise SaaS</div>
+      <div class="project-name">DataPulse Dashboard</div>
+      <div class="project-desc">Complex analytics platform for enterprise clients. Designed a flexible, data-dense interface that remains scannable and actionable at every level.</div>
+      <div class="project-tags"><span class="tag">Dashboard</span><span class="tag">Design System</span><span class="tag">B2B</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">003</div>
+      <div class="project-icon">💳</div>
+      <div class="project-type">FinTech Mobile</div>
+      <div class="project-name">Velo Wallet App</div>
+      <div class="project-desc">Personal finance app targeting millennials. Designed onboarding, transaction flows, and spending insights — achieving 4.8★ on launch day.</div>
+      <div class="project-tags"><span class="tag">iOS / Android</span><span class="tag">FinTech</span><span class="tag">Prototype</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">004</div>
+      <div class="project-icon">🏥</div>
+      <div class="project-type">HealthTech</div>
+      <div class="project-name">MedTrack Portal</div>
+      <div class="project-desc">Patient-facing health monitoring platform. Designed accessible, anxiety-reducing interfaces for users managing chronic conditions.</div>
+      <div class="project-tags"><span class="tag">Accessibility</span><span class="tag">Healthcare</span><span class="tag">Web</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">005</div>
+      <div class="project-icon">🏫</div>
+      <div class="project-type">EdTech</div>
+      <div class="project-name">LearnPath LMS</div>
+      <div class="project-desc">Learning management system for 50K+ students. Focused on engagement loops, progress visualization, and instructor-learner communication.</div>
+      <div class="project-tags"><span class="tag">EdTech</span><span class="tag">UX Strategy</span><span class="tag">Web App</span></div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-number">006</div>
+      <div class="project-icon">🚚</div>
+      <div class="project-type">Logistics</div>
+      <div class="project-name">FleetOps Platform</div>
+      <div class="project-desc">Ops-heavy tool for fleet managers tracking 10,000+ vehicles. Designed for power users under pressure — speed, density, and clarity above all.</div>
+      <div class="project-tags"><span class="tag">Complex UX</span><span class="tag">Maps</span><span class="tag">Enterprise</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="figma-section" id="prototype">
+  <div class="section-label">Live Prototype</div>
+  <div class="section-title">Interact with the<br><em>real design</em></div>
+  <div class="figma-wrapper reveal">
+    <div class="figma-header">
+      <div class="figma-header-left">
+        <div class="figma-dot"></div>
+        <div>
+          <div class="figma-title">GDOC — Interactive Figma Prototype</div>
+          <div class="figma-subtitle">Click through the full user flow below</div>
+        </div>
+      </div>
+      <a href="https://www.figma.com/proto/t2hRFTkc3egL7vrvxReXhy/GDOC?node-id=170-6925&page-id=170%3A506&starting-point-node-id=170%3A7858&t=xhmzpv7cStGr5jIR-1" target="_blank" class="figma-open-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Open in Figma
+      </a>
+    </div>
+    <div class="figma-embed-container">
+      <iframe src="https://www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2Ft2hRFTkc3egL7vrvxReXhy%2FGDOC%3Fnode-id%3D170-6925%26page-id%3D170%253A506%26starting-point-node-id%3D170%253A7858%26t%3DxhmzpV7cStGr5jIR-1" allowfullscreen loading="lazy" title="GDOC Figma Prototype"></iframe>
+      <div class="figma-overlay-hint">Click + interact with the prototype</div>
+    </div>
+  </div>
+  <div style="margin-top:24px;display:flex;gap:16px;align-items:center;justify-content:flex-end;">
+    <a href="mukesh-case-study.html" target="_blank" class="btn-primary">Read Full Case Study →</a>
+  </div>
+</section>
+
+<div class="quote-section">
+  <div class="quote-inner">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">Solving real user problems through design thinking and turning complex requirements into simple, meaningful experiences.</p>
+    <div class="quote-author">— Mukesh, Design Philosophy</div>
+  </div>
+</div>
+
+<section class="contact" id="contact">
+  <div class="contact-left reveal">
+    <div class="section-label">Contact</div>
+    <div class="section-title">Let's build something <em>great</em></div>
+    <p class="contact-text">Open to full-time roles, freelance projects, and long-term collaborations. If you have a product that needs thoughtful design, let's talk.</p>
+  </div>
+  <div class="contact-links reveal">
+    <a href="mailto:mukesh@design.co" class="contact-link">
+      <div><div class="contact-link-label">Email</div><div class="contact-link-value">mukesh@design.co</div></div>
+      <div class="contact-link-arrow">→</div>
+    </a>
+    <a href="#" class="contact-link">
+      <div><div class="contact-link-label">LinkedIn</div><div class="contact-link-value">linkedin.com/in/mukesh</div></div>
+      <div class="contact-link-arrow">→</div>
+    </a>
+    <a href="#" class="contact-link">
+      <div><div class="contact-link-label">Dribbble</div><div class="contact-link-value">dribbble.com/mukesh</div></div>
+      <div class="contact-link-arrow">→</div>
+    </a>
+    <a href="#" class="contact-link">
+      <div><div class="contact-link-label">Resume</div><div class="contact-link-value">Download PDF</div></div>
+      <div class="contact-link-arrow">↓</div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div>© 2025 Mukesh — UI/UX Designer</div>
+  <div>Designed with intention. Built with precision.</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor');
+  const ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`;});
+  function animRing(){rx+=(mx-rx-16)*0.12;ry+=(my-ry-16)*0.12;ring.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,button,.project-card,.skill-item,.process-step').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ring.style.width='52px';ring.style.height='52px';ring.style.opacity='0.6';});
+    el.addEventListener('mouseleave',()=>{ring.style.width='32px';ring.style.height='32px';ring.style.opacity='0.4';});
+  });
+  const navbar=document.getElementById('navbar');
+  window.addEventListener('scroll',()=>navbar.classList.toggle('scrolled',window.scrollY>40));
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),100*(e.target.dataset.delay||0));obs.unobserve(e.target);}
+    });
+  },{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach((el,i)=>{el.dataset.delay=i%4;obs.observe(el);});
+</script>
+</body>
+</html>
